@@ -1,0 +1,49 @@
+﻿@using System.Configuration
+@model IEnumerable<ProductManager.WebApp.Models.ProductViewModel>
+
+@{
+    string authorizationKey = ConfigurationManager.AppSettings["AuthorizationKey"];
+    string apiBaseUrl = ConfigurationManager.AppSettings["ApiBaseUrl"];
+}
+
+<h2>Products</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Key</th>
+            <th>Name</th>
+            <th>List Price</th>
+            <th>Stock Level</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="tableProductList">
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Key</td>
+                    <td>@item.Name</td>
+                    <td>@item.Price</td>
+                    <td>@item.StockLevel</td>
+                    <td>
+                        @Html.ActionLink("✏️ Update", "UpdateProduct", "Home", new { id = item.Id }, null),
+                        <a href="javascript:;" onclick="deleteProductDialog('@item.Id')">⛔ Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    function deleteProductDialog(id) {
+        if (confirm("Do you really want to delete?")) {
+            deleteProduct('@apiBaseUrl', '@authorizationKey', id);
+        }
+    }
+</script>

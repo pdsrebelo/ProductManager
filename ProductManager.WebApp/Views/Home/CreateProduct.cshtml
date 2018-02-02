@@ -1,0 +1,31 @@
+﻿@using System.Configuration
+@using ProductManager.WebApp.Models
+
+@{
+    ViewBag.Title = "Create Product";
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/apiClient")
+
+    string authorizationKey = ConfigurationManager.AppSettings["AuthorizationKey"];
+    string apiBaseUrl = ConfigurationManager.AppSettings["ApiBaseUrl"];
+}
+
+<h2>Create Product</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "submitForm" }))
+{
+    Html.RenderPartial("Product", new ProductViewModel());
+    <button type="submit" class="btn btn-primary">Create</button>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        loadSubCategories('@apiBaseUrl', '@authorizationKey', '@Url.Action("LoadSubCategories", "Home")');
+
+        $('#submitForm').on('submit',
+            function (event) {
+                event.preventDefault();
+                createProduct('@apiBaseUrl', '@authorizationKey', $("#submitForm"));
+        });
+    });
+</script>

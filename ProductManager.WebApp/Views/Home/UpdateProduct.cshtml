@@ -1,0 +1,32 @@
+﻿@using System.Configuration
+
+@{
+    ViewBag.Title = "Update Product";
+
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/apiClient")
+
+    string authorizationKey = ConfigurationManager.AppSettings["AuthorizationKey"];
+    string apiBaseUrl = ConfigurationManager.AppSettings["ApiBaseUrl"];
+}
+
+<h2>Update Product</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "submitForm" }))
+{
+    Html.RenderPartial("Product");
+    <button type="submit" class="btn btn-primary">Update</button>
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        getProduct('@apiBaseUrl', '@authorizationKey', '@ViewBag.ProductId',
+            '@Url.Action("LoadProduct", "Home")', '@Url.Action("LoadSubCategories", "Home")');
+
+        $('#submitForm').on('submit',
+            function(event) {
+                event.preventDefault();
+                updateProduct('@apiBaseUrl', '@authorizationKey', $("#submitForm"));
+            });
+    });
+</script>

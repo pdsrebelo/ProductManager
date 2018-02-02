@@ -1,0 +1,9 @@
+﻿@using ProductManager.WebApp.Models
+@model ProductCategoryDropDownViewModel
+
+@Html.DropDownListFor(
+    p => p.ProductCategoryId,
+    new SelectList(Model != null ? Model.Categories : new List<ProductCategoryViewModel>(), "Id", "Name"),
+    "--- Choose a Category ---",
+    new { @class = "form-control", id = "categories-dropdown" }
+)
